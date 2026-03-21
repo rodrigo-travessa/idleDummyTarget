@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dpf2bygdw33ai"]
+
+[ext_resource type="Script" uid="uid://cslx65bwi28rs" path="res://Dummy/dummy.gd" id="1_tx5ky"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_2v26e"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tx5ky"]
+size = Vector2(32, 32)
+
+[node name="Dummy" type="Node2D" unique_id=64581430]
+script = ExtResource("1_tx5ky")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1163422088]
+modulate = Color(0.6321697, 0, 0.21938065, 1)
+material = SubResource("CanvasItemMaterial_2v26e")
+texture = SubResource("PlaceholderTexture2D_tx5ky")
