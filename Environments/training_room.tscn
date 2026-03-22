@@ -1,12 +1,21 @@
 [gd_scene format=3 uid="uid://bmrfctpppc5dq"]
 
 [ext_resource type="PackedScene" uid="uid://7eruaphswl7r" path="res://Player/player.tscn" id="1_3f2q8"]
+[ext_resource type="Script" uid="uid://c4d657byxl77q" path="res://Environments/training_room.gd" id="1_krgdp"]
 [ext_resource type="PackedScene" uid="uid://dpf2bygdw33ai" path="res://Dummy/dummy.tscn" id="2_nqbhv"]
+[ext_resource type="Script" uid="uid://bi8lk5bivq6mp" path="res://Dummy/dummy_stats.gd" id="3_nqbhv"]
+
+[sub_resource type="Resource" id="Resource_krgdp"]
+script = ExtResource("3_nqbhv")
+metadata/_custom_type_script = "uid://bi8lk5bivq6mp"
 
 [node name="TrainingRoom" type="Node2D" unique_id=1858231320]
+script = ExtResource("1_krgdp")
 
-[node name="Player" parent="." unique_id=1650196642 instance=ExtResource("1_3f2q8")]
-position = Vector2(408, 313)
+[node name="Player" parent="." unique_id=1650196642 node_paths=PackedStringArray("target") instance=ExtResource("1_3f2q8")]
+position = Vector2(499, 309)
+target = NodePath("../Dummy")
 
 [node name="Dummy" parent="." unique_id=64581430 instance=ExtResource("2_nqbhv")]
-position = Vector2(636, 306)
+position = Vector2(610, 309)
+stats = SubResource("Resource_krgdp")

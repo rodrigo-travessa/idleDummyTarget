@@ -1,23 +1,23 @@
 class_name Dummy extends Node2D
 
 var damage_text_scene: Resource = preload("uid://dcd3vnwjq85qo")
-var _temp_cd: float = 0.5
+@onready var text_marker: Marker2D = $"./TextMarker"
 
-
-
+@export var stats: DummyStats = DummyStats.new()
+var crit_label_settings: LabelSettings = LabelSettings.new()
+var normal_label_settings: LabelSettings = LabelSettings.new()
 
 func _ready():
-	return
+	crit_label_settings.font_color = Color(1, 0, 0, 1)
+	crit_label_settings.font_size = 20
+	normal_label_settings.font_color = Color(1, 1, 1, 1)
 
-func _process(delta: float) -> void:
-	_emit_damage_text(delta)
-
-
-func _emit_damage_text(delta: float):
-	if _temp_cd < 0:
-		var damage_text_float = damage_text_scene.instantiate()
-		damage_text_float.position = get_global_position()
-		damage_text_float.text = "999"
-		add_child(damage_text_float)
-		_temp_cd = 0.5
-	_temp_cd -= delta
+func _emit_damage_text(value: float, is_crit: bool) -> void:
+	var damage_text_float = damage_text_scene.instantiate()
+	print(damage_text_float.global_position)
+	if is_crit:
+		damage_text_float.label_settings = crit_label_settings
+	else:
+		damage_text_float.label_settings = normal_label_settings
+	damage_text_float.text = str(value)
+	add_child(damage_text_float)

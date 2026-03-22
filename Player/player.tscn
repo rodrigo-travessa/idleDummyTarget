@@ -1,12 +1,21 @@
 [gd_scene format=3 uid="uid://7eruaphswl7r"]
 
 [ext_resource type="Script" uid="uid://7s7tvkqebu3j" path="res://Player/player.gd" id="1_l8h54"]
+[ext_resource type="Script" uid="uid://dhsmu0gp720ca" path="res://Player/player_stats.gd" id="2_4ntmi"]
+
+[sub_resource type="Resource" id="Resource_btcbx"]
+script = ExtResource("2_4ntmi")
+crit_chance = 80.0
+crit_damage = 100.0
+accuracy = 95.0
+metadata/_custom_type_script = "uid://dhsmu0gp720ca"
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_hvfyp"]
 size = Vector2(32, 32)
 
 [node name="Player" type="Node2D" unique_id=1650196642]
 script = ExtResource("1_l8h54")
+stats = SubResource("Resource_btcbx")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=792188642]
 texture = SubResource("PlaceholderTexture2D_hvfyp")
