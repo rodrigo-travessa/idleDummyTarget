@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://de5tkdw6os4pg"]
+
+[ext_resource type="PackedScene" uid="uid://cxm2q6pjsupr3" path="res://GameComponents/ItemSystem/Inventory/inventory_window.tscn" id="1_btsii"]
+[ext_resource type="Texture2D" uid="uid://cb3jt8emdd2ah" path="res://GameComponents/ItemSystem/Inventory/Captura de tela 2026-03-22 185619.png" id="2_2dk35"]
+
+[node name="InventoryScene" type="Control" unique_id=1093733792]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1348392658]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InventoryWindow" parent="HBoxContainer" unique_id=610083204 instance=ExtResource("1_btsii")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=1276893469]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer" unique_id=406686911]
+layout_mode = 2
+texture = ExtResource("2_2dk35")
+expand_mode = 4

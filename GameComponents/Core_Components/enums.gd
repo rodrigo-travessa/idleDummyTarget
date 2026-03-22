@@ -42,3 +42,15 @@ enum DummyStats{
 	HP_REGEN,
 	EVASION
 }
+
+enum ItemType {
+	HELMET,
+	CHEST,
+	LEGS,
+	WEAPON,
+	SHIELD,
+	RING,
+	BELT,
+	BOOTS,
+	AMULET
+}

@@ -1,7 +1,6 @@
 class_name Dummy extends Node2D
 
 var damage_text_scene: Resource = preload("uid://dcd3vnwjq85qo")
-@onready var text_marker: Marker2D = $"./TextMarker"
 
 @export var stats: DummyStats = DummyStats.new()
 var crit_label_settings: LabelSettings = LabelSettings.new()

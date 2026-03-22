@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InventoryData" format=3 uid="uid://b85lvoq2q2fdu"]
+
+[ext_resource type="Script" uid="uid://b01ajb4mant13" path="res://GameComponents/ItemSystem/Items/item_data.gd" id="1_j6bu7"]
+[ext_resource type="Script" uid="uid://belnut1ckps7i" path="res://GameComponents/ItemSystem/Inventory/inventory_data.gd" id="2_bpaod"]
+[ext_resource type="Resource" uid="uid://drgolc0n86unh" path="res://GameComponents/ItemSystem/Items/TestItem1.tres" id="2_fu4u4"]
+[ext_resource type="Resource" uid="uid://1nua3uxkweuf" path="res://GameComponents/ItemSystem/Items/TestItem2.tres" id="3_5iywf"]
+
+[resource]
+script = ExtResource("2_bpaod")
+item_data = Array[ExtResource("1_j6bu7")]([null, ExtResource("2_fu4u4"), ExtResource("3_5iywf"), ExtResource("2_fu4u4"), null, null, null, null, null, null, null, null, null, null, null, ExtResource("2_fu4u4"), null, null, null, null, null, null, null, null, null, null])
+metadata/_custom_type_script = "uid://belnut1ckps7i"

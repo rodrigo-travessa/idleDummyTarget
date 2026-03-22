@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://drgolc0n86unh"]
+
+[ext_resource type="Texture2D" uid="uid://y4suag6a815t" path="res://GameComponents/ItemSystem/Items/Armor.png" id="1_5tvyu"]
+[ext_resource type="Script" uid="uid://b01ajb4mant13" path="res://GameComponents/ItemSystem/Items/item_data.gd" id="2_jfbnk"]
+
+[resource]
+script = ExtResource("2_jfbnk")
+item_name = "Armor"
+item_texture = ExtResource("1_5tvyu")
+metadata/_custom_type_script = "uid://b01ajb4mant13"
