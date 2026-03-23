@@ -3,31 +3,13 @@ class_name ItemSlot
 
 @export var current_item: ItemData
 var index: int
+var inventory_data: Resource
+var tooltip_scene : PackedScene = preload("res://GameComponents/UI_Components/tooltip.tscn") #ItemTooltipScene
+var tooltip
 
 func _ready() -> void:
 	set_item_slot()
-
-func _get_drag_data(point: Vector2) -> Variant:
-	if not current_item:
-		return
-	var preview : ItemSlot = duplicate()
-	var c = Control.new()
-	c.add_child(preview)
-	preview.position -= Vector2(12, 12)
-
-	set_drag_preview(c)
-	return current_item
-
-func _can_drop_data(point: Vector2, data: Variant) -> bool:
-	return true
-
-func _drop_data(point: Vector2, data: Variant) -> void:
-	print("Dropped item: " + str(data))
-	print(str(point.x) + ", " + str(point.y))
-	print(str(index))
-	current_item = data
-	set_item_slot()
-	data = null
+	tooltip = tooltip_scene.instantiate()
 
 
 func set_item_slot() -> void:
@@ -35,3 +17,19 @@ func set_item_slot() -> void:
 		return
 	%ItemTexture.texture = current_item.item_texture
 	%ItemAmountLabel.text = str(current_item.item_amount)
+
+func _on_mouse_entered():
+	if current_item:
+		tooltip = tooltip_scene.instantiate()
+		tooltip.visible = true
+		tooltip.ItemName = current_item.item_name
+		tooltip.ItemTexture = current_item.item_texture
+		tooltip.ItemStats = "Placeholder Stats"
+		tooltip.global_position = get_global_mouse_position() + Vector2(5, 5)
+		get_tree().root.add_child.call_deferred(tooltip)
+
+
+
+
+func _on_mouse_exited() -> void:
+	tooltip.visible = false

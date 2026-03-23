@@ -54,3 +54,8 @@ enum ItemType {
 	BOOTS,
 	AMULET
 }
+
+enum InventoryType {
+	INVENTORY,
+	EQUIPMENT
+}
