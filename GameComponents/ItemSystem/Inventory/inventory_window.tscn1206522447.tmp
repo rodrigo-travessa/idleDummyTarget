@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://cxm2q6pjsupr3"]
+
+[ext_resource type="Script" uid="uid://d1ijixoa5kvvd" path="res://GameComponents/ItemSystem/Inventory/inventory_window.gd" id="1_6l111"]
+[ext_resource type="Resource" uid="uid://b85lvoq2q2fdu" path="res://GameComponents/ItemSystem/Inventory/TestInventory.tres" id="2_2treo"]
+[ext_resource type="Texture2D" uid="uid://ccw6crsbl4tfs" path="res://GameComponents/ItemSystem/Inventory/InventoryBackground.jpeg" id="3_4limj"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tnudo"]
+texture = ExtResource("3_4limj")
+
+[node name="InventoryWindow" type="Control" unique_id=610083204]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6l111")
+inventory_data = ExtResource("2_2treo")
+
+[node name="Inventory" type="PanelContainer" parent="." unique_id=879985971]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_tnudo")
+
+[node name="MarginContainer" type="MarginContainer" parent="Inventory" unique_id=1319588361]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Inventory/MarginContainer" unique_id=1811950470]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Inventory/MarginContainer/VBoxContainer" unique_id=289032892]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Inventory"
+
+[node name="SlotGroup" type="GridContainer" parent="Inventory/MarginContainer/VBoxContainer" unique_id=1025182439]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 6

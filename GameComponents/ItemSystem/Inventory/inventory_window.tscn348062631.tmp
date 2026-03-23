@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://cxm2q6pjsupr3"]
+
+[ext_resource type="Script" uid="uid://d1ijixoa5kvvd" path="res://GameComponents/ItemSystem/Inventory/inventory_window.gd" id="1_6l111"]
+[ext_resource type="Resource" uid="uid://b85lvoq2q2fdu" path="res://GameComponents/ItemSystem/Inventory/TestInventory.tres" id="2_2treo"]
+[ext_resource type="Texture2D" uid="uid://ccw6crsbl4tfs" path="res://GameComponents/ItemSystem/Inventory/InventoryBackground.jpeg" id="3_4limj"]
+[ext_resource type="Script" uid="uid://b01ajb4mant13" path="res://GameComponents/ItemSystem/Items/item_data.gd" id="3_wgjw5"]
+[ext_resource type="Resource" uid="uid://drgolc0n86unh" path="res://GameComponents/ItemSystem/Items/TestItem1.tres" id="4_pk8ew"]
+[ext_resource type="Script" uid="uid://bknrwb20gm26r" path="res://GameComponents/ItemSystem/Inventory/equipment_data.gd" id="4_rxebe"]
+[ext_resource type="Resource" uid="uid://1nua3uxkweuf" path="res://GameComponents/ItemSystem/Items/TestItem2.tres" id="5_e3ana"]
+
+[sub_resource type="Resource" id="Resource_pk8ew"]
+script = ExtResource("4_rxebe")
+item_data = Array[ExtResource("3_wgjw5")]([null, null, null, ExtResource("4_pk8ew"), null, ExtResource("5_e3ana"), null, null, null])
+metadata/_custom_type_script = "uid://bknrwb20gm26r"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tnudo"]
+texture = ExtResource("3_4limj")
+
+[node name="InventoryWindow" type="Control" unique_id=610083204]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_6l111")
+inventory_data = ExtResource("2_2treo")
+equipment_data = SubResource("Resource_pk8ew")
+metadata/_edit_use_anchors_ = true
+
+[node name="Inventory" type="PanelContainer" parent="." unique_id=879985971]
+layout_mode = 1
+offset_right = 95.0
+offset_bottom = 47.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_tnudo")
+
+[node name="MarginContainer" type="MarginContainer" parent="Inventory" unique_id=1319588361]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Inventory/MarginContainer" unique_id=1811950470]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Inventory/MarginContainer/VBoxContainer" unique_id=289032892]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Inventory"
+
+[node name="SlotGroup" type="GridContainer" parent="Inventory/MarginContainer/VBoxContainer" unique_id=1025182439]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 6
+
+[node name="EquipedItems" type="PanelContainer" parent="." unique_id=994211355]
+layout_mode = 0
+offset_left = 598.0
+offset_top = 448.0
+offset_right = 1198.0
+offset_bottom = 798.0
+
+[node name="MarginContainer" type="MarginContainer" parent="EquipedItems" unique_id=333452185]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 15
+
+[node name="SlotGroup2" type="GridContainer" parent="EquipedItems/MarginContainer" unique_id=2041713899]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0

@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://bi4svw8pv17un"]
+
+[ext_resource type="Texture2D" uid="uid://ccw6crsbl4tfs" path="res://GameComponents/ItemSystem/Inventory/InventoryBackground.jpeg" id="1_arl61"]
+[ext_resource type="Script" uid="uid://iuogxt0jqu0g" path="res://GameComponents/UI_Components/tooltip.gd" id="1_wwgg8"]
+[ext_resource type="Texture2D" uid="uid://y4suag6a815t" path="res://GameComponents/ItemSystem/Items/Armor.png" id="2_wwgg8"]
+
+[node name="Tooltip" type="Control" unique_id=1198029196]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_wwgg8")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=782448410]
+custom_minimum_size = Vector2(150, 200)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_arl61")
+expand_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=95361212]
+custom_minimum_size = Vector2(150, 200)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1531315515]
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+
+[node name="ItemName" type="Label" parent="MarginContainer/VBoxContainer" unique_id=2105761646]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Item Name"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1507113748]
+layout_mode = 2
+
+[node name="ItemTexture" type="TextureRect" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1971045226]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_wwgg8")
+stretch_mode = 5
+
+[node name="ItemStats" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=2018922247]
+unique_name_in_owner = true
+layout_mode = 2
+text = " Strenght : 10
+ Dexterity: 8
+ Constitution: 6"
