@@ -7,4 +7,9 @@
 script = ExtResource("2_jfbnk")
 item_name = "Armor"
 item_texture = ExtResource("1_5tvyu")
+item_stats = Dictionary[int, int]({
+0: 5,
+2: 15,
+6: 35
+})
 metadata/_custom_type_script = "uid://b01ajb4mant13"

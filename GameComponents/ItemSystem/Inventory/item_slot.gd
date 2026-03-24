@@ -24,7 +24,14 @@ func _on_mouse_entered():
 		tooltip.visible = true
 		tooltip.ItemName = current_item.item_name
 		tooltip.ItemTexture = current_item.item_texture
-		tooltip.ItemStats = "Placeholder Stats"
+		
+		var stats_text = ""
+		for stat_id in current_item.item_stats:
+			var stat_name = Enums.StatId.keys()[stat_id].capitalize()
+			var stat_value = current_item.item_stats[stat_id]
+			stats_text += "%s: %s\n" % [stat_name, stat_value]
+		
+		tooltip.ItemStats = stats_text
 		tooltip.global_position = get_global_mouse_position() + Vector2(5, 5)
 		get_tree().root.add_child.call_deferred(tooltip)
 

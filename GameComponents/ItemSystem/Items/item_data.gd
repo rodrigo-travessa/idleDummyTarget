@@ -5,3 +5,4 @@ class_name ItemData
 @export var item_texture: Texture2D
 @export var item_amount: int = 1
 @export var item_type: Enums.ItemType
+@export var item_stats: Dictionary[Enums.StatId, int]
