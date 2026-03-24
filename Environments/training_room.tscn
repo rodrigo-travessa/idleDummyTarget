@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dpf2bygdw33ai" path="res://Dummy/dummy.tscn" id="2_nqbhv"]
 [ext_resource type="Script" uid="uid://bi8lk5bivq6mp" path="res://Dummy/dummy_stats.gd" id="3_nqbhv"]
 [ext_resource type="PackedScene" uid="uid://cxm2q6pjsupr3" path="res://GameComponents/ItemSystem/Inventory/inventory_window.tscn" id="5_wd7k3"]
+[ext_resource type="PackedScene" uid="uid://coxeoeilfhesy" path="res://GameComponents/ItemSystem/Shop/shop_container.tscn" id="6_mc4ix"]
 
 [sub_resource type="Resource" id="Resource_krgdp"]
 script = ExtResource("3_nqbhv")
@@ -23,3 +24,7 @@ stats = SubResource("Resource_krgdp")
 
 [node name="InventoryWindow" parent="." unique_id=610083204 instance=ExtResource("5_wd7k3")]
 size_flags_horizontal = 0
+
+[node name="ShopContainer" parent="." unique_id=2114843995 instance=ExtResource("6_mc4ix")]
+offset_left = 233.0
+offset_right = 233.0

@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://coxeoeilfhesy"]
+
+[ext_resource type="Texture2D" uid="uid://ccw6crsbl4tfs" path="res://GameComponents/ItemSystem/Inventory/InventoryBackground.jpeg" id="1_7rnk1"]
+[ext_resource type="Script" uid="uid://c7ipte6tm3s4t" path="res://GameComponents/ItemSystem/Shop/shop_container.gd" id="1_y8x01"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y8x01"]
+texture = ExtResource("1_7rnk1")
+
+[node name="ShopContainer" type="Control" unique_id=2114843995]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y8x01")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=253087139]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_y8x01")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1286842015]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1509274703]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2138898340]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Shop
+"
+
+[node name="ShopSlotGroup" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=607327736]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 6
