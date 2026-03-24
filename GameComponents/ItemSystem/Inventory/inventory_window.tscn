@@ -11,7 +11,6 @@
 [sub_resource type="Resource" id="Resource_pk8ew"]
 script = ExtResource("4_rxebe")
 item_data = Array[ExtResource("3_wgjw5")]([null, null, null, ExtResource("4_pk8ew"), null, ExtResource("5_e3ana"), null, null, null])
-metadata/_custom_type_script = "uid://bknrwb20gm26r"
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tnudo"]
 texture = ExtResource("3_4limj")

@@ -13,6 +13,17 @@ func _process(delta: float) -> void:
 
 
 func _ready() -> void:
+	var save = SaveManager.load_save()
+	if save:
+		if save.inventory_data:
+			inventory_data = save.inventory_data
+
+		if save.equipment_data:
+			equipment_data = save.equipment_data
+
+		if equipment_data.item_data.size() == 0:
+			equipment_data = EquipmentData.new()
+			equipment_data.item_data.resize(9)
 	update_inventory_data()
 	connect_signals()
 
@@ -29,21 +40,25 @@ func update_inventory_data() -> void:
 	var inventory_index: int = 0
 	var equipment_index: int = 0
 
-	for item_data in inventory_data.item_data:
-		var new_slot = preload("uid://lfclvjuoc48l").instantiate() #ItemSlot UUID
-		new_slot.current_item = item_data
-		new_slot.index = inventory_index
-		new_slot.inventory_data = inventory_data
-		inventory_index += 1
-		%SlotGroup.add_child(new_slot)
+	if inventory_data and inventory_data.item_data:
+		for item_data in inventory_data.item_data:
+			var new_slot = preload("uid://lfclvjuoc48l").instantiate() #ItemSlot UUID
+			new_slot.current_item = item_data
+			new_slot.index = inventory_index
+			new_slot.inventory_data = inventory_data
+			inventory_index += 1
+			%SlotGroup.add_child(new_slot)
 
-	for item_data in equipment_data.item_data:
-		var new_slot = preload("uid://lfclvjuoc48l").instantiate() #ItemSlot UUID
-		new_slot.current_item = item_data
-		new_slot.index = equipment_index
-		new_slot.inventory_data = equipment_data
-		equipment_index += 1
-		%SlotGroup2.add_child(new_slot)
+	if equipment_data and equipment_data.item_data:
+		for item_data in equipment_data.item_data:
+			var new_slot = preload("uid://lfclvjuoc48l").instantiate() #ItemSlot UUID
+			new_slot.current_item = item_data
+			new_slot.index = equipment_index
+			new_slot.inventory_data = equipment_data
+			equipment_index += 1
+			%SlotGroup2.add_child(new_slot)
+
+	SaveManager.save_game(inventory_data, equipment_data)
 
 
 func _input(event: InputEvent) -> void:
