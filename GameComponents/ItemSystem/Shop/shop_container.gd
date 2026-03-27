@@ -116,9 +116,23 @@ func delete_dragged_item():
 	get_node("ItemDrag").queue_free()
 
 func create_drag_item(Index: int, SourceData: Resource):
-	current_dragged_item_data = {"Item" : SourceData.item_data[Index], "Index": Index, "SourceData": SourceData}
+	var item = SourceData.item_data[Index]
+	current_dragged_item_data = {"Item" : item, "Index": Index, "SourceData": SourceData}
 	var new_drag_item : TextureRect = TextureRect.new()
-	new_drag_item.texture = SourceData.item_data[Index].item_texture
+	new_drag_item.texture = item.item_texture
 	new_drag_item.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	new_drag_item.name = "ItemDrag"
+	new_drag_item.modulate = get_tier_color(item.item_stats.size())
+	
 	add_child(new_drag_item)
+
+func get_tier_color(modifier_count: int) -> Color:
+	match modifier_count:
+		2:
+			return Color.GREEN
+		3:
+			return Color.CORNFLOWER_BLUE
+		4:
+			return Color.MEDIUM_PURPLE
+		_:
+			return Color.WHITE

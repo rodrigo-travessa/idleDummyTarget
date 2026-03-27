@@ -17,6 +17,18 @@ func set_item_slot() -> void:
 		return
 	%ItemTexture.texture = current_item.item_texture
 	%ItemAmountLabel.text = str(current_item.item_amount)
+	%ItemTexture.modulate = get_tier_color(current_item.item_stats.size())
+
+func get_tier_color(modifier_count: int) -> Color:
+	match modifier_count:
+		2:
+			return Color.GREEN
+		3:
+			return Color.CORNFLOWER_BLUE
+		4:
+			return Color.MEDIUM_PURPLE
+		_:
+			return Color.WHITE
 
 func _on_mouse_entered():
 	if current_item:
@@ -24,6 +36,7 @@ func _on_mouse_entered():
 		tooltip.visible = true
 		tooltip.ItemName = current_item.item_name
 		tooltip.ItemTexture = current_item.item_texture
+		tooltip.TextureModulate = get_tier_color(current_item.item_stats.size())
 		
 		var stats_text = ""
 		for stat_id in current_item.item_stats:
