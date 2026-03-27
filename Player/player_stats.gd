@@ -33,35 +33,46 @@ class_name PlayerStats extends Resource
 @export var hp_regen: float = 0.0
 
 
+var bonus_stats: Dictionary = {}
+
 func get_stat(stat_id: Enums.StatId) -> float:
+	var base_value: float = 0.0
 	match stat_id:
-		Enums.StatId.MAX_HP: return max_hp
-		Enums.StatId.MAX_MANA: return max_mana
-		Enums.StatId.STRENGTH: return strength  
-		Enums.StatId.DEXTERITY: return dexterity
-		Enums.StatId.INTELLIGENCE: return intelligence
-		Enums.StatId.VITALITY: return vitality
-		Enums.StatId.LUCK: return luck
-		Enums.StatId.ATTACK_POWER: return attack_power
-		Enums.StatId.MAGIC_POWER: return magic_power
-		Enums.StatId.DEFENSE: return defense
-		Enums.StatId.MAGIC_DEFENSE: return magic_defense
-		Enums.StatId.CRIT_CHANCE: return crit_chance
-		Enums.StatId.CRIT_DAMAGE: return crit_damage
-		Enums.StatId.ATTACK_SPEED: return attack_speed
-		Enums.StatId.CAST_SPEED: return cast_speed
-		Enums.StatId.ACCURACY: return accuracy
-		Enums.StatId.EVASION: return evasion
-		Enums.StatId.MOVE_SPEED: return move_speed
-		Enums.StatId.COOLDOWN_REDUCTION: return cooldown_reduction
-		Enums.StatId.LIFE_STEAL: return life_steal
-		Enums.StatId.STATUS_CHANCE: return status_chance
-		Enums.StatId.STATUS_DURATION: return status_duration
-		Enums.StatId.ARMOR_PENETRATION: return armor_penetration
-		Enums.StatId.MAGIC_PENETRATION: return magic_penetration
-		Enums.StatId.MANA_REGEN: return mana_regen
-		Enums.StatId.HP_REGEN: return hp_regen
-		_: return 0.0
+		Enums.StatId.MAX_HP: base_value = max_hp
+		Enums.StatId.MAX_MANA: base_value = max_mana
+		Enums.StatId.STRENGTH: base_value = strength  
+		Enums.StatId.DEXTERITY: base_value = dexterity
+		Enums.StatId.INTELLIGENCE: base_value = intelligence
+		Enums.StatId.VITALITY: base_value = vitality
+		Enums.StatId.LUCK: base_value = luck
+		Enums.StatId.ATTACK_POWER: base_value = attack_power
+		Enums.StatId.MAGIC_POWER: base_value = magic_power
+		Enums.StatId.DEFENSE: base_value = defense
+		Enums.StatId.MAGIC_DEFENSE: base_value = magic_defense
+		Enums.StatId.CRIT_CHANCE: base_value = crit_chance
+		Enums.StatId.CRIT_DAMAGE: base_value = crit_damage
+		Enums.StatId.ATTACK_SPEED: base_value = attack_speed
+		Enums.StatId.CAST_SPEED: base_value = cast_speed
+		Enums.StatId.ACCURACY: base_value = accuracy
+		Enums.StatId.EVASION: base_value = evasion
+		Enums.StatId.MOVE_SPEED: base_value = move_speed
+		Enums.StatId.COOLDOWN_REDUCTION: base_value = cooldown_reduction
+		Enums.StatId.LIFE_STEAL: base_value = life_steal
+		Enums.StatId.STATUS_CHANCE: base_value = status_chance
+		Enums.StatId.STATUS_DURATION: base_value = status_duration
+		Enums.StatId.ARMOR_PENETRATION: base_value = armor_penetration
+		Enums.StatId.MAGIC_PENETRATION: base_value = magic_penetration
+		Enums.StatId.MANA_REGEN: base_value = mana_regen
+		Enums.StatId.HP_REGEN: base_value = hp_regen
+		_: base_value = 0.0
+	
+	return base_value + bonus_stats.get(stat_id, 0.0)
+
+func reset_bonuses() -> void:
+	bonus_stats.clear()
+
+func add_bonus(stat_id: Enums.StatId, value: float) -> void:
+	bonus_stats[stat_id] = bonus_stats.get(stat_id, 0.0) + value
 
 
 func set_stat(stat_id: Enums.StatId, value: float) -> void:
