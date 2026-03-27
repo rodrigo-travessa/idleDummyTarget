@@ -14,7 +14,6 @@ func _ready():
 	
 	GlobalSignalBus.connect("UpdateInventory", _on_inventory_updated)
 	update_effective_stats()
-	delay_between_attacks = stats.get_stat(Enums.StatId.ATTACK_SPEED) / 1
 
 func _on_inventory_updated() -> void:
 	# Small delay to ensure the save is completed if triggered by the same signal
@@ -36,7 +35,7 @@ func update_effective_stats() -> void:
 					stats.add_bonus(stat_id, item.item_stats[stat_id])
 	
 	# Update internal variables that depend on stats
-	delay_between_attacks = stats.get_stat(Enums.StatId.ATTACK_SPEED) / 1
+	delay_between_attacks = 1 / (1 + 0.1 * stats.get_stat(Enums.StatId.ATTACK_SPEED))
 
 func _process(delta: float) -> void:
 	if target and time_until_next_attack <= 0:
