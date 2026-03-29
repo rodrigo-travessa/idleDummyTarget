@@ -34,25 +34,43 @@ func update_effective_stats() -> void:
 				for stat_id in item.item_stats:
 					stats.add_bonus(stat_id, item.item_stats[stat_id])
 	
-	# Update internal variables that depend on stats
-	delay_between_attacks = 1 / (1 + 0.1 * stats.get_stat(Enums.StatId.ATTACK_SPEED))
+	# Formula for delay between attacks influenced by Attack Speed and Dexterity
+	# Base attack speed of 1.0 (one attack per second)
+	# Each point of Dexterity adds 5% attack speed
+	# Each point of Attack Speed stat adds 10% attack speed
+	var total_attack_speed = stats.get_stat(Enums.StatId.ATTACK_SPEED) * 0.1 \
+			+ stats.get_stat(Enums.StatId.DEXTERITY) * 0.05
+	delay_between_attacks = 1.0 / (1.0 + total_attack_speed)
 
 func _process(delta: float) -> void:
-	if target and time_until_next_attack <= 0:
-		var attack_result = calculate_damage()
-		target._emit_damage_text(attack_result[0], attack_result[1])
-		time_until_next_attack = delay_between_attacks
-	time_until_next_attack -= delta
+	if target:
+		if time_until_next_attack <= 0:
+			var attack_result = calculate_damage()
+			target._emit_damage_text(attack_result[0], attack_result[1])
+			time_until_next_attack = delay_between_attacks
+		time_until_next_attack -= delta
 
 
 func calculate_damage() -> Array:
-	var final_damage = stats.get_stat(Enums.StatId.ATTACK_POWER) \
-	+ stats.get_stat(Enums.StatId.STRENGTH) * 5 \
-	+ stats.get_stat(Enums.StatId.DEXTERITY) * 1
+	# Damage influenced by Strength and Attack Power
+	# Base damage could be 1.0, Strength adds 5.0 per point, Attack Power adds 1.0 per point
+	var final_damage = 1.0 \
+	+ stats.get_stat(Enums.StatId.ATTACK_POWER) \
+	+ stats.get_stat(Enums.StatId.STRENGTH) * 5.0
 
+	# Luck and crit chance should influence critical chance
+	# Luck adds 0.5% crit chance per point, plus the base crit chance stat
+	var total_crit_chance = stats.get_stat(Enums.StatId.CRIT_CHANCE) \
+			+ stats.get_stat(Enums.StatId.LUCK) * 0.5
+	
+	# Luck and crit damage should influence critical damage multiplier
+	# Luck adds 1% crit damage per point, plus the base crit damage stat
+	var total_crit_damage = stats.get_stat(Enums.StatId.CRIT_DAMAGE) \
+			+ stats.get_stat(Enums.StatId.LUCK) * 1.0
+	
 	# Handle Critical Hits
-	var is_crit = randf_range(0.0, 100.0) <= stats.get_stat(Enums.StatId.CRIT_CHANCE)
+	var is_crit = randf_range(0.0, 100.0) <= total_crit_chance
 	if is_crit:
-		final_damage *= (1.0 + stats.get_stat(Enums.StatId.CRIT_DAMAGE) / 100.0)
+		final_damage *= (1.0 + total_crit_damage / 100.0)
 
 	return [final_damage, is_crit]
