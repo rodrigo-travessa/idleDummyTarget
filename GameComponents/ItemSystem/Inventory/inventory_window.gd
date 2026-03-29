@@ -26,11 +26,20 @@ func _ready() -> void:
 			equipment_data.item_data.resize(9)
 	update_inventory_data()
 	connect_signals()
+	update_stats_display()
+
+func update_stats_display() -> void:
+	var player = get_tree().root.find_child("Player", true, false)
+	if player and player.stats:
+		if not player.stats.StatsChanged.is_connected(update_stats_display):
+			player.stats.StatsChanged.connect(update_stats_display)
+		%CharachterStatsPanel.text = player.stats.get_stat_string()
 
 func connect_signals() -> void:
 	GlobalSignalBus.connect("UpdateInventory", update_inventory_data)
 
 func update_inventory_data() -> void:
+	update_stats_display()
 	for slot in %SlotGroup.get_children():
 		slot.queue_free()
 

@@ -13,7 +13,6 @@ func _ready():
 
 func _emit_damage_text(value: float, is_crit: bool) -> void:
 	var damage_text_float = damage_text_scene.instantiate()
-	print(damage_text_float.global_position)
 	if is_crit:
 		damage_text_float.label_settings = crit_label_settings
 	else:

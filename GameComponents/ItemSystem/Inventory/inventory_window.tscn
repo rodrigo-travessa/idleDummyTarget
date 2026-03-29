@@ -69,8 +69,22 @@ theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 15
 
-[node name="SlotGroup2" type="GridContainer" parent="EquipedItems/MarginContainer" unique_id=2041713899]
+[node name="VBoxContainer" type="HBoxContainer" parent="EquipedItems/MarginContainer" unique_id=148273885]
+layout_mode = 2
+
+[node name="SlotGroup2" type="GridContainer" parent="EquipedItems/MarginContainer/VBoxContainer" unique_id=2041713899]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
+
+[node name="CharachterStatsPanel" type="TextEdit" parent="EquipedItems/MarginContainer/VBoxContainer" unique_id=190662746]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Str:
+Dex:
+Attack Power:
+Crit Chance:
+Crit Multi:
+Attack Speed:"
