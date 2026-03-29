@@ -3,11 +3,17 @@ extends Control
 @export var inventory_data: InventoryData
 
 var current_dragged_item_data: Dictionary
+var shop_size: int = 60
 
-var item_textures = [
-	preload("res://GameComponents/ItemSystem/Items/Armor.png"),
-	preload("res://GameComponents/ItemSystem/Items/Helmet.png")
-]
+var item_textures = {
+	Enums.ItemType.HELMET: preload("res://GameComponents/ItemSystem/Items/Helmet.png"),
+	Enums.ItemType.CHEST: preload("res://GameComponents/ItemSystem/Items/Armor.png"),
+	Enums.ItemType.LEGS: preload("res://GameComponents/ItemSystem/Items/pants.png"),
+	Enums.ItemType.RING: preload("res://GameComponents/ItemSystem/Items/Ring.png"),
+	Enums.ItemType.BELT: preload("res://GameComponents/ItemSystem/Items/belt.png"),
+	Enums.ItemType.BOOTS: preload("res://GameComponents/ItemSystem/Items/boots.png"),
+	Enums.ItemType.AMULET: preload("res://GameComponents/ItemSystem/Items/amulet.png")
+}
 
 func _process(_delta: float) -> void:
 	if not has_node("ItemDrag"):
@@ -30,16 +36,16 @@ func connect_signals() -> void:
 
 func generate_shop_items() -> void:
 	inventory_data = InventoryData.new()
-	inventory_data.item_data.resize(25)
+	inventory_data.item_data.resize(shop_size)
 	
-	for i in range(25):
+	for i in range(shop_size):
 		inventory_data.item_data[i] = generate_random_item()
 
 func generate_random_item() -> ItemData:
 	var item = ItemData.new()
 	item.item_name = "Random Item"
-	item.item_texture = item_textures[randi() % item_textures.size()]
-	item.item_type = Enums.ItemType.values()[randi() % Enums.ItemType.size()]
+	item.item_type = item_textures.keys()[randi() % item_textures.size()]
+	item.item_texture = item_textures[item.item_type]
 	
 	var num_stats = randi_range(1, 4)
 	var available_stats = Enums.StatId.values()
@@ -49,6 +55,8 @@ func generate_random_item() -> ItemData:
 		var stat_id = available_stats[i]
 		var stat_value = randi_range(0, 10)
 		item.item_stats[stat_id] = stat_value
+	
+	item.price = item.item_stats.size() * 10 + randi_range(0, 10)
 		
 	return item
 
@@ -79,8 +87,18 @@ func _input(event: InputEvent) -> void:
 
 		var source_data = hovered_node.inventory_data
 		var current_index : int = hovered_node.index
-		if not source_data.item_data[current_index]:
+		var item = source_data.item_data[current_index]
+		if not item:
 			return
+
+		var player: Player = get_tree().root.find_child("Player", true, false)
+		if player and player.stats:
+			if player.stats.total_gold < item.price:
+				print("Not enough gold!")
+				return
+			else:
+				player.stats.total_gold -= item.price
+
 		create_drag_item(current_index, source_data)
 		source_data.item_data[current_index] = null
 		GlobalSignalBus.UpdateInventory.emit()

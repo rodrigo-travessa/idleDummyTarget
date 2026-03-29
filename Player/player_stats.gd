@@ -80,7 +80,7 @@ func get_stat(stat_id: Enums.StatId) -> float:
 func get_stat_string() -> String:
 	var stats_string: String = ""
 
-	stats_string += "Gold: %s \n" % total_gold
+	stats_string += "Gold: %.0f \n" % total_gold
 	stats_string += "Strength: %s \n" % get_stat(Enums.StatId.STRENGTH)
 	stats_string += "Dexterity: %s \n" % get_stat(Enums.StatId.DEXTERITY)
 	stats_string += "Luck: %s \n" % get_stat(Enums.StatId.LUCK)

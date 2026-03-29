@@ -45,7 +45,7 @@ func update_dps_ui() -> void:
 	var dps_item_change = damage_since_item_change / time_since_item_change
 	
 	var current_gold = player.stats.total_gold if player and player.stats else 0.0
-	var text = "Gold: %s \n" % current_gold
+	var text = "Gold: %.0f \n" % current_gold
 	text += "DPS: %.2f\n" % dps_1s
 	text += "Dps Last 5 seconds: %.2f\n" % dps_5s
 	text += "Dps Last 30 seconds %.2f\n" % dps_30s

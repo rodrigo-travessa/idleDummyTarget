@@ -11,7 +11,7 @@ anchors_preset = 0
 script = ExtResource("1_wwgg8")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=782448410]
-custom_minimum_size = Vector2(150, 200)
+custom_minimum_size = Vector2(150, 250)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0

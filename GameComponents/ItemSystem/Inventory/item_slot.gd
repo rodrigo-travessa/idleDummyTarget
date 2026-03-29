@@ -36,6 +36,7 @@ func _on_mouse_entered():
 		tooltip.visible = true
 		tooltip.ItemName = current_item.item_name
 		tooltip.ItemTexture = current_item.item_texture
+		tooltip.ItemPrice = current_item.price
 		tooltip.TextureModulate = get_tier_color(current_item.item_stats.size())
 
 		var stats_text = ""

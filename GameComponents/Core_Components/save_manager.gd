@@ -10,26 +10,26 @@ func _ready() -> void:
 func save_game(inventory_data : InventoryData, equipment_data: EquipmentData, player_stats: PlayerStats = null):
 	var game_save = SaveData.new()
 	#game_save.player_stats = PlayerManager.get_player_stats()
-	
+
 	# If the resources have a res:// path, we must duplicate them to save them as internal resources
 	# Otherwise, ResourceSaver will save a reference to the res:// path, which is read-only at runtime.
-	# We also duplicate resources that have NO resource_path (internal subresources) 
+	# We also duplicate resources that have NO resource_path (internal subresources)
 	# to ensure they are properly decoupled from the scene file.
 	if inventory_data and (inventory_data.resource_path.begins_with("res://") or inventory_data.resource_path == ""):
 		game_save.inventory_data = inventory_data.duplicate()
 	else:
 		game_save.inventory_data = inventory_data
-		
+
 	if equipment_data and (equipment_data.resource_path.begins_with("res://") or equipment_data.resource_path == ""):
 		game_save.equipment_data = equipment_data.duplicate()
 	else:
 		game_save.equipment_data = equipment_data
-	
+
 	if player_stats and (player_stats.resource_path.begins_with("res://") or player_stats.resource_path == ""):
 		game_save.player_stats = player_stats.duplicate()
 	else:
 		game_save.player_stats = player_stats
-		
+
 	var error = ResourceSaver.save(game_save, path_to_save_file)
 	if error != OK:
 		print("Error saving game: ", error)
@@ -49,7 +49,7 @@ func load_save() -> SaveData:
 	if not FileAccess.file_exists(path_to_save_file):
 		print("No save file found at: ", path_to_save_file)
 		return null
-	
+
 	var loaded_save : SaveData = ResourceLoader.load(path_to_save_file, "", ResourceLoader.CACHE_MODE_REPLACE) as SaveData
 	if loaded_save:
 		print("Save file loaded successfully from: ", path_to_save_file)

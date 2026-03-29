@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dickkxwgmvm4x"]
+
+[ext_resource type="Script" uid="uid://b01ajb4mant13" path="res://GameComponents/ItemSystem/Items/item_data.gd" id="1_8fyas"]
+[ext_resource type="Texture2D" uid="uid://dglk0dnqpq136" path="res://GameComponents/ItemSystem/Items/pants.png" id="1_l4j0w"]
+
+[resource]
+script = ExtResource("1_8fyas")
+item_texture = ExtResource("1_l4j0w")
+metadata/_custom_type_script = "uid://b01ajb4mant13"

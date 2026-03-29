@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cgrmg0212uuow"]
+
+[ext_resource type="Script" uid="uid://b01ajb4mant13" path="res://GameComponents/ItemSystem/Items/item_data.gd" id="1_dhuy2"]
+[ext_resource type="Texture2D" uid="uid://b7mm40yivm50p" path="res://GameComponents/ItemSystem/Items/Ring.png" id="1_tefmq"]
+
+[resource]
+script = ExtResource("1_dhuy2")
+item_texture = ExtResource("1_tefmq")
+metadata/_custom_type_script = "uid://b01ajb4mant13"

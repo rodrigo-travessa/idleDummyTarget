@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://ds71qoecfmoru"]
+
+[ext_resource type="Script" uid="uid://b01ajb4mant13" path="res://GameComponents/ItemSystem/Items/item_data.gd" id="1_earlf"]
+[ext_resource type="Texture2D" uid="uid://cltl11jna2o0v" path="res://GameComponents/ItemSystem/Items/belt.png" id="1_p1h17"]
+
+[resource]
+script = ExtResource("1_earlf")
+item_texture = ExtResource("1_p1h17")
+metadata/_custom_type_script = "uid://b01ajb4mant13"
