@@ -56,7 +56,17 @@ func generate_random_item() -> ItemData:
 		var stat_value = randi_range(0, 10)
 		item.item_stats[stat_id] = stat_value
 	
-	item.price = item.item_stats.size() * 10 + randi_range(0, 10)
+	match num_stats:
+		1: # Normal
+			item.price = randi_range(1000, 2000)
+		2: # Uncommon
+			item.price = randi_range(1500, 3000)
+		3: # Rare
+			item.price = randi_range(3000, 10000)
+		4: # Epic
+			item.price = randi_range(10000, 25000)
+		_:
+			item.price = item.item_stats.size() * 10 + randi_range(0, 10)
 		
 	return item
 
