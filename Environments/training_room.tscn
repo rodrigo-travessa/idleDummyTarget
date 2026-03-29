@@ -28,3 +28,13 @@ size_flags_horizontal = 0
 [node name="ShopContainer" parent="." unique_id=2114843995 instance=ExtResource("6_mc4ix")]
 offset_left = 233.0
 offset_right = 233.0
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1747047426]
+offset_left = 561.0
+offset_top = 1.0
+offset_right = 1199.0
+offset_bottom = 196.0
+
+[node name="DpsCounter" type="TextEdit" parent="PanelContainer" unique_id=523701849]
+unique_name_in_owner = true
+layout_mode = 2

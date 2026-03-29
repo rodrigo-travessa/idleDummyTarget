@@ -67,7 +67,8 @@ func update_inventory_data() -> void:
 			equipment_index += 1
 			%SlotGroup2.add_child(new_slot)
 
-	SaveManager.save_game(inventory_data, equipment_data)
+	var player = get_tree().root.find_child("Player", true, false)
+	SaveManager.save_game(inventory_data, equipment_data, player.stats if player else null)
 
 
 func _input(event: InputEvent) -> void:

@@ -7,7 +7,7 @@ func _ready() -> void:
 	print("SaveManager Loaded")
 
 
-func save_game(inventory_data : InventoryData, equipment_data: EquipmentData):
+func save_game(inventory_data : InventoryData, equipment_data: EquipmentData, player_stats: PlayerStats = null):
 	var game_save = SaveData.new()
 	#game_save.player_stats = PlayerManager.get_player_stats()
 	
@@ -24,6 +24,11 @@ func save_game(inventory_data : InventoryData, equipment_data: EquipmentData):
 		game_save.equipment_data = equipment_data.duplicate()
 	else:
 		game_save.equipment_data = equipment_data
+	
+	if player_stats and (player_stats.resource_path.begins_with("res://") or player_stats.resource_path == ""):
+		game_save.player_stats = player_stats.duplicate()
+	else:
+		game_save.player_stats = player_stats
 		
 	var error = ResourceSaver.save(game_save, path_to_save_file)
 	if error != OK:

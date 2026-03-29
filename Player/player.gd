@@ -9,8 +9,15 @@ var time_until_next_attack: float = 0.0
 
 func _ready():
 	var save = SaveManager.load_save()
-	if save and save.equipment_data:
-		equipment_data = save.equipment_data
+	if save:
+		if save.equipment_data:
+			equipment_data = save.equipment_data
+		if save.player_stats:
+			# If we have saved stats, we should probably use them, 
+			# but be careful not to overwrite the reference if it's already set from editor
+			# and contains important metadata.
+			# For now, let's just copy the gold.
+			stats.total_gold = save.player_stats.total_gold
 	
 	GlobalSignalBus.connect("UpdateInventory", _on_inventory_updated)
 	update_effective_stats()
@@ -46,7 +53,10 @@ func _process(delta: float) -> void:
 	if target:
 		if time_until_next_attack <= 0:
 			var attack_result = calculate_damage()
-			target._emit_damage_text(attack_result[0], attack_result[1])
+			var damage_dealt = attack_result[0]
+			var is_crit = attack_result[1]
+			target._emit_damage_text(damage_dealt, is_crit)
+			GlobalSignalBus.PlayerDamaged.emit(damage_dealt)
 			time_until_next_attack = delay_between_attacks
 		time_until_next_attack -= delta
 
