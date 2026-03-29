@@ -41,3 +41,10 @@ text = "Shop
 unique_name_in_owner = true
 layout_mode = 2
 columns = 6
+
+[node name="RefreshShopButton" type="Button" parent="PanelContainer" unique_id=873292914]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Refresh"

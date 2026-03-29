@@ -19,6 +19,11 @@ func _ready() -> void:
 	generate_shop_items()
 	update_shop_ui()
 	connect_signals()
+	%RefreshShopButton.pressed.connect(_on_refresh_shop_button_pressed)
+
+func _on_refresh_shop_button_pressed() -> void:
+	generate_shop_items()
+	update_shop_ui()
 
 func connect_signals() -> void:
 	GlobalSignalBus.connect("UpdateInventory", update_shop_ui)
