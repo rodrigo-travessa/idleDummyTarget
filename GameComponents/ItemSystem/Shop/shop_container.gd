@@ -142,6 +142,14 @@ func _input(event: InputEvent) -> void:
 
 		target_data.item_data[target_index] = item
 		GlobalSignalBus.UpdateInventory.emit()
+		
+		# If the target is the player's inventory or equipment, save the game
+		if target_data is InventoryData or target_data is EquipmentData:
+			var player = get_tree().root.find_child("Player", true, false)
+			var inv_window = get_tree().root.find_child("InventoryWindow", true, false)
+			if inv_window:
+				SaveManager.save_game(inv_window.inventory_data, inv_window.equipment_data, player.stats if player else null)
+		
 		current_dragged_item_data = {}
 
 

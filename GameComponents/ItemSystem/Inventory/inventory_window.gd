@@ -68,7 +68,8 @@ func update_inventory_data() -> void:
 			%SlotGroup2.add_child(new_slot)
 
 	var player = get_tree().root.find_child("Player", true, false)
-	SaveManager.save_game(inventory_data, equipment_data, player.stats if player else null)
+	# Removed intermediate save to avoid voiding items during drag
+	# SaveManager.save_game(inventory_data, equipment_data, player.stats if player else null)
 
 
 func _input(event: InputEvent) -> void:
@@ -76,14 +77,18 @@ func _input(event: InputEvent) -> void:
 		var hovered_node : Control = get_viewport().gui_get_hovered_control()
 		if hovered_node is not ItemSlot:
 			return
-		if hovered_node is ItemSlot:
-			var source_data = hovered_node.inventory_data
-			var current_index : int = hovered_node.index
-			if not source_data.item_data[current_index]:
-				return
-			create_drag_item(current_index, source_data)
-			source_data.item_data[current_index] = null
-			GlobalSignalBus.UpdateInventory.emit()
+		
+		# Only start drag if the slot belongs to this inventory/equipment window
+		if hovered_node.get_parent() != %SlotGroup and hovered_node.get_parent() != %SlotGroup2:
+			return
+			
+		var source_data = hovered_node.inventory_data
+		var current_index : int = hovered_node.index
+		if not source_data.item_data[current_index]:
+			return
+		create_drag_item(current_index, source_data)
+		source_data.item_data[current_index] = null
+		GlobalSignalBus.UpdateInventory.emit()
 
 	if event.is_action_released("mouse_left"):
 		if !current_dragged_item_data:
@@ -100,6 +105,10 @@ func _input(event: InputEvent) -> void:
 		if not hovered_node is ItemSlot:
 			source_data.item_data[index] = item
 			GlobalSignalBus.UpdateInventory.emit()
+			
+			var player = get_tree().root.find_child("Player", true, false)
+			SaveManager.save_game(inventory_data, equipment_data, player.stats if player else null)
+			
 			current_dragged_item_data = {}
 			return
 
@@ -114,6 +123,10 @@ func _input(event: InputEvent) -> void:
 
 		target_data.item_data[target_index] = item
 		GlobalSignalBus.UpdateInventory.emit()
+		
+		var player = get_tree().root.find_child("Player", true, false)
+		SaveManager.save_game(inventory_data, equipment_data, player.stats if player else null)
+		
 		current_dragged_item_data = {}
 
 

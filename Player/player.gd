@@ -23,14 +23,6 @@ func _ready():
 	update_effective_stats()
 
 func _on_inventory_updated() -> void:
-	# Small delay to ensure the save is completed if triggered by the same signal
-	await get_tree().process_frame
-	
-	# Reload equipment data to reflect changes in the save file
-	var save = SaveManager.load_save()
-	if save and save.equipment_data:
-		equipment_data = save.equipment_data
-	
 	update_effective_stats()
 
 func update_effective_stats() -> void:
