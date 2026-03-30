@@ -177,6 +177,50 @@ func _input(event: InputEvent) -> void:
 		source_data.item_data[current_index] = null
 		GlobalSignalBus.UpdateInventory.emit()
 
+	if event.is_action_pressed("mouse_right"):
+		var hovered_node : Control = get_viewport().gui_get_hovered_control()
+		if hovered_node is not ItemSlot:
+			return
+		
+		# Check if the slot belongs to THIS shop container
+		if hovered_node.get_parent() != %ShopSlotGroup:
+			return
+
+		var source_data = hovered_node.inventory_data
+		var current_index : int = hovered_node.index
+		var item = source_data.item_data[current_index]
+		if not item:
+			return
+
+		var player: Player = get_tree().root.find_child("Player", true, false)
+		if player and player.stats:
+			if player.stats.total_gold < item.price:
+				print("Not enough gold!")
+				return
+			
+			var inv_window = get_tree().root.find_child("InventoryWindow", true, false)
+			if not inv_window or not inv_window.inventory_data:
+				return
+			
+			var target_inv = inv_window.inventory_data
+			var empty_slot_index = -1
+			for i in range(target_inv.item_data.size()):
+				if target_inv.item_data[i] == null:
+					empty_slot_index = i
+					break
+			
+			if empty_slot_index == -1:
+				print("Inventory full!")
+				return
+				
+			# Proceed with purchase
+			player.stats.total_gold -= item.price
+			target_inv.item_data[empty_slot_index] = item
+			source_data.item_data[current_index] = null
+			
+			SaveManager.save_game(inv_window.inventory_data, inv_window.equipment_data, player.stats)
+			GlobalSignalBus.UpdateInventory.emit()
+
 	if event.is_action_released("mouse_left"):
 		if !current_dragged_item_data:
 			return
