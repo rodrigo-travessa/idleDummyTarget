@@ -47,16 +47,20 @@ func generate_shop_items() -> void:
 	inventory_data = InventoryData.new()
 	inventory_data.item_data.resize(shop_size)
 	
+	var legendary_index = randi() % shop_size
 	for i in range(shop_size):
-		inventory_data.item_data[i] = generate_random_item()
+		if i == legendary_index:
+			inventory_data.item_data[i] = generate_random_item(true)
+		else:
+			inventory_data.item_data[i] = generate_random_item(false)
 
-func generate_random_item() -> ItemData:
+func generate_random_item(is_legendary: bool = false) -> ItemData:
 	var item = ItemData.new()
-	item.item_name = "Random Item"
+	item.item_name = "Legendary Item" if is_legendary else "Random Item"
 	item.item_type = item_textures.keys()[randi() % item_textures.size()]
 	item.item_texture = item_textures[item.item_type]
 	
-	var num_stats = randi_range(1, 4)
+	var num_stats = 6 if is_legendary else randi_range(1, 4)
 	var available_stats = Enums.StatId.values()
 	available_stats.shuffle()
 	
@@ -74,6 +78,8 @@ func generate_random_item() -> ItemData:
 			item.price = randi_range(3000, 10000)
 		4: # Epic
 			item.price = randi_range(10000, 25000)
+		6: # Legendary
+			item.price = randi_range(50000, 100000)
 		_:
 			item.price = item.item_stats.size() * 10 + randi_range(0, 10)
 		
@@ -184,5 +190,7 @@ func get_tier_color(modifier_count: int) -> Color:
 			return Color.CORNFLOWER_BLUE
 		4:
 			return Color.MEDIUM_PURPLE
+		6:
+			return Color.ORANGE
 		_:
 			return Color.WHITE

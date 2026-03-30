@@ -75,14 +75,33 @@ func _on_combine_pressed() -> void:
 				new_stats[s] += stats2[s]
 			else:
 				new_stats[s] = stats2[s]
+		result_item.price = randi_range(1000, 3000)
 	elif count1 == 2: # Uncommon -> Rare (3 stats from 4)
 		result_item.item_name = "Rare " + item1.item_name
 		var all_stats = _get_combined_stats_list(stats1, stats2)
 		_pick_random_stats(new_stats, all_stats, 3)
+		result_item.price = randi_range(3000, 10000)
 	elif count1 == 3: # Rare -> Epic (4 stats from 6)
 		result_item.item_name = "Epic " + item1.item_name
 		var all_stats = _get_combined_stats_list(stats1, stats2)
 		_pick_random_stats(new_stats, all_stats, 4)
+		result_item.price = randi_range(10000, 25000)
+	elif count1 == 4: # Epic -> Legendary (6 stats from 8)
+		result_item.item_name = "Legendary " + item1.item_name
+		var all_stats = _get_combined_stats_list(stats1, stats2)
+		_pick_random_stats(new_stats, all_stats, 6)
+		
+		# Ensure we have 6 unique stats
+		if new_stats.size() < 6:
+			var available_stats = Enums.StatId.values()
+			available_stats.shuffle()
+			for stat_id in available_stats:
+				if new_stats.size() >= 6:
+					break
+				if not new_stats.has(stat_id):
+					new_stats[stat_id] = randi_range(1, 10)
+		
+		result_item.price = randi_range(50000, 100000)
 	else:
 		print("Recombinator: Unsupported rarity or max reached (%d)" % count1)
 		return # Max rarity reached or unknown

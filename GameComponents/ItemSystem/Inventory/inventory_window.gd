@@ -211,5 +211,7 @@ func get_tier_color(modifier_count: int) -> Color:
 			return Color.CORNFLOWER_BLUE
 		4:
 			return Color.MEDIUM_PURPLE
+		6:
+			return Color.ORANGE
 		_:
 			return Color.WHITE
