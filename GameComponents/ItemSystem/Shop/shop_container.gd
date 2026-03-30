@@ -18,7 +18,16 @@ var item_textures = {
 func _process(_delta: float) -> void:
 	if not has_node("ItemDrag"):
 		return
-	get_node("ItemDrag").global_position = get_global_mouse_position() - get_node("ItemDrag").size / 2
+	
+	var drag_item = get_node("ItemDrag")
+	var viewport_rect = get_viewport_rect()
+	var target_pos = get_global_mouse_position() - drag_item.size / 2
+	
+	# Clamp to screen
+	target_pos.x = clamp(target_pos.x, 0, viewport_rect.size.x - drag_item.size.x)
+	target_pos.y = clamp(target_pos.y, 0, viewport_rect.size.y - drag_item.size.y)
+	
+	drag_item.global_position = target_pos
 
 
 func _ready() -> void:

@@ -55,7 +55,7 @@ func _on_mouse_entered():
 			stats_text += "%s: %s\n" % [stat_name, stat_value]
 
 		tooltip.ItemStats = stats_text
-		tooltip.global_position = get_global_mouse_position() + Vector2(5, 5)
+		tooltip.global_position = get_global_mouse_position() + Vector2(10, 10)
 		get_tree().root.add_child.call_deferred(tooltip)
 
 
