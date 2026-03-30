@@ -188,6 +188,29 @@ func _input(event: InputEvent) -> void:
 		
 		current_dragged_item_data = {}
 
+	if event.is_action_pressed("mouse_right"):
+		var hovered_node: Control = get_viewport().gui_get_hovered_control()
+		if hovered_node is not ItemSlot:
+			return
+		
+		var source_data = hovered_node.inventory_data
+		if not source_data:
+			return
+			
+		var current_index: int = hovered_node.index
+		if current_index < 0 or current_index >= source_data.item_data.size():
+			return
+			
+		if not source_data.item_data[current_index]:
+			return
+			
+		if source_data is EquipmentData:
+			InventoryManager.unequip_item(current_index, source_data, inventory_data)
+		elif source_data is InventoryData:
+			# Se o inventory_data for o inventário principal da janela
+			if source_data == inventory_data:
+				InventoryManager.equip_item(current_index, inventory_data, equipment_data)
+
 
 func delete_dragged_item():
 	get_node("ItemDrag").queue_free()

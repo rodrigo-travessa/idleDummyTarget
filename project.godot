@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GlobalSignalBus="*uid://b2y7mcldvtmhc"
 SaveManager="*uid://bmtsw52akfpne"
+InventoryManager="*res://GameComponents/Core_Components/inventory_manager.gd"
 
 [display]
 
