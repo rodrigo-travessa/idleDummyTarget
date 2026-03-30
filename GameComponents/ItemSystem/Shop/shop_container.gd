@@ -8,7 +8,7 @@ var shop_size: int = 60
 var item_textures = {
 	Enums.ItemType.HELMET: preload("res://GameComponents/ItemSystem/Items/Helmet.png"),
 	Enums.ItemType.CHEST: preload("res://GameComponents/ItemSystem/Items/Armor.png"),
-	Enums.ItemType.LEGS: preload("res://GameComponents/ItemSystem/Items/pants.png"),
+	Enums.ItemType.PANTS: preload("res://GameComponents/ItemSystem/Items/pants.png"),
 	Enums.ItemType.RING: preload("res://GameComponents/ItemSystem/Items/Ring.png"),
 	Enums.ItemType.BELT: preload("res://GameComponents/ItemSystem/Items/belt.png"),
 	Enums.ItemType.BOOTS: preload("res://GameComponents/ItemSystem/Items/boots.png"),
@@ -58,9 +58,9 @@ func generate_random_item() -> ItemData:
 	
 	match num_stats:
 		1: # Normal
-			item.price = randi_range(1000, 2000)
+			item.price = randi_range(100, 1000)
 		2: # Uncommon
-			item.price = randi_range(1500, 3000)
+			item.price = randi_range(1000, 3000)
 		3: # Rare
 			item.price = randi_range(3000, 10000)
 		4: # Epic

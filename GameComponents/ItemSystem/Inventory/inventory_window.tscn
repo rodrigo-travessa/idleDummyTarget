@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://ccw6crsbl4tfs" path="res://GameComponents/ItemSystem/Inventory/InventoryBackground.jpeg" id="3_4limj"]
 [ext_resource type="Script" uid="uid://b01ajb4mant13" path="res://GameComponents/ItemSystem/Items/item_data.gd" id="3_wgjw5"]
 [ext_resource type="Resource" uid="uid://drgolc0n86unh" path="res://GameComponents/ItemSystem/Items/TestItem1.tres" id="4_pk8ew"]
-[ext_resource type="Script" path="res://GameComponents/ItemSystem/Inventory/equipment_data.gd" id="4_rxebe"]
+[ext_resource type="Script" uid="uid://bknrwb20gm26r" path="res://GameComponents/ItemSystem/Inventory/equipment_data.gd" id="4_rxebe"]
 [ext_resource type="Resource" uid="uid://1nua3uxkweuf" path="res://GameComponents/ItemSystem/Items/TestItem2.tres" id="5_e3ana"]
 
 [sub_resource type="Resource" id="Resource_pk8ew"]
@@ -55,6 +55,11 @@ text = "Inventory"
 unique_name_in_owner = true
 layout_mode = 2
 columns = 8
+
+[node name="DeleteInventoryButton" type="Button" parent="Inventory/MarginContainer/VBoxContainer" unique_id=1279060399]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reset All Progress"
 
 [node name="EquipedItems" type="PanelContainer" parent="." unique_id=994211355]
 layout_mode = 0

@@ -58,7 +58,7 @@ func calculate_damage() -> Array:
 	# Base damage could be 1.0, Strength adds 5.0 per point, Attack Power adds 1.0 per point
 	var final_damage = 1.0 \
 	+ stats.get_stat(Enums.StatId.ATTACK_POWER) \
-	+ stats.get_stat(Enums.StatId.STRENGTH) * 5.0
+	+ stats.get_stat(Enums.StatId.STRENGTH) * 0.5
 
 	# Luck and crit chance should influence critical chance
 	# Luck adds 0.5% crit chance per point, plus the base crit chance stat
@@ -68,7 +68,7 @@ func calculate_damage() -> Array:
 	# Luck and crit damage should influence critical damage multiplier
 	# Luck adds 1% crit damage per point, plus the base crit damage stat
 	var total_crit_damage = stats.get_stat(Enums.StatId.CRIT_DAMAGE) \
-			+ stats.get_stat(Enums.StatId.LUCK) * 1.0
+			+ stats.get_stat(Enums.StatId.LUCK) * 0.5
 	
 	# Handle Critical Hits
 	var is_crit = randf_range(0.0, 100.0) <= total_crit_chance

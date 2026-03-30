@@ -3,6 +3,15 @@ extends Control
 @export var inventory_data: InventoryData
 @export var equipment_data: EquipmentData
 
+var item_textures = {
+	Enums.ItemType.HELMET: preload("res://GameComponents/ItemSystem/Items/Helmet.png"),
+	Enums.ItemType.CHEST: preload("res://GameComponents/ItemSystem/Items/Armor.png"),
+	Enums.ItemType.PANTS: preload("res://GameComponents/ItemSystem/Items/pants.png"),
+	Enums.ItemType.RING: preload("res://GameComponents/ItemSystem/Items/Ring.png"),
+	Enums.ItemType.BELT: preload("res://GameComponents/ItemSystem/Items/belt.png"),
+	Enums.ItemType.BOOTS: preload("res://GameComponents/ItemSystem/Items/boots.png"),
+	Enums.ItemType.AMULET: preload("res://GameComponents/ItemSystem/Items/amulet.png")
+}
 
 var current_dragged_item_data: Dictionary
 
@@ -21,12 +30,25 @@ func _ready() -> void:
 		if save.equipment_data:
 			equipment_data = save.equipment_data
 
-		if equipment_data.item_data.size() == 0:
+		if equipment_data.item_data.size() != EquipmentData.SLOT_TYPES.size():
 			equipment_data = EquipmentData.new()
-			equipment_data.item_data.resize(9)
+			equipment_data.item_data.resize(EquipmentData.SLOT_TYPES.size())
 	update_inventory_data()
 	connect_signals()
 	update_stats_display()
+	%DeleteInventoryButton.pressed.connect(_on_delete_inventory_button_pressed)
+
+func _on_delete_inventory_button_pressed() -> void:
+	if inventory_data and inventory_data.item_data:
+		for i in range(inventory_data.item_data.size()):
+			inventory_data.item_data[i] = null
+	
+	var player = get_tree().root.find_child("Player", true, false)
+	if player and player.stats:
+		player.stats.total_gold = 0
+	
+	SaveManager.save_game(inventory_data, equipment_data, player.stats if player else null)
+	GlobalSignalBus.UpdateInventory.emit()
 
 func update_stats_display() -> void:
 	var player = get_tree().root.find_child("Player", true, false)
@@ -55,8 +77,9 @@ func update_inventory_data() -> void:
 			new_slot.current_item = item_data
 			new_slot.index = inventory_index
 			new_slot.inventory_data = inventory_data
-			inventory_index += 1
 			%SlotGroup.add_child(new_slot)
+			new_slot.set_hint_texture(null) # Hide hints in inventory
+			inventory_index += 1
 
 	if equipment_data and equipment_data.item_data:
 		for item_data in equipment_data.item_data:
@@ -64,6 +87,11 @@ func update_inventory_data() -> void:
 			new_slot.current_item = item_data
 			new_slot.index = equipment_index
 			new_slot.inventory_data = equipment_data
+			
+			var slot_type = EquipmentData.SLOT_TYPES[equipment_index]
+			if item_textures.has(slot_type):
+				new_slot.set_hint_texture(item_textures[slot_type])
+				
 			equipment_index += 1
 			%SlotGroup2.add_child(new_slot)
 
@@ -114,6 +142,12 @@ func _input(event: InputEvent) -> void:
 
 		var target_data = hovered_node.inventory_data
 		var target_index = hovered_node.index
+
+		if target_data is EquipmentData and not target_data.can_equip(item, target_index):
+			source_data.item_data[index] = item
+			GlobalSignalBus.UpdateInventory.emit()
+			current_dragged_item_data = {}
+			return
 
 		if target_data.item_data[target_index]:
 			source_data.item_data[index] = item

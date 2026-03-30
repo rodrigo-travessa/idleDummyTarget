@@ -14,10 +14,19 @@ func _ready() -> void:
 
 func set_item_slot() -> void:
 	if not current_item:
+		%ItemTexture.texture = null
+		%ItemAmountLabel.text = ""
+		%HintTexture.visible = true
 		return
 	%ItemTexture.texture = current_item.item_texture
 	%ItemAmountLabel.text = str(current_item.item_amount)
 	%ItemTexture.modulate = get_tier_color(current_item.item_stats.size())
+	%HintTexture.visible = false
+
+func set_hint_texture(texture: Texture2D) -> void:
+	%HintTexture.texture = texture
+	if texture == null:
+		%HintTexture.visible = false
 
 func get_tier_color(modifier_count: int) -> Color:
 	match modifier_count:

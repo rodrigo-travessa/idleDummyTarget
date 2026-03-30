@@ -46,9 +46,7 @@ enum DummyStats{
 enum ItemType {
 	HELMET,
 	CHEST,
-	LEGS,
-	#WEAPON,
-	#SHIELD,
+	PANTS,
 	RING,
 	BELT,
 	BOOTS,
