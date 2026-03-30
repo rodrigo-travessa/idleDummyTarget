@@ -12,7 +12,6 @@ func _ready() -> void:
 	%ItemTexture.texture = ItemTexture
 	%ItemTexture.modulate = TextureModulate
 	%ItemStats.text = ItemStats + "Price: %s Gold" % ItemPrice
-	get_tree().create_timer(10).timeout.connect(queue_free)
 	
 	# Adjust position to stay within viewport
 	call_deferred("_adjust_position")

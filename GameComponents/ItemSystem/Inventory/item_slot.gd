@@ -13,6 +13,9 @@ func _ready() -> void:
 
 
 func set_item_slot() -> void:
+	if inventory_data and inventory_data.item_data.size() > index:
+		current_item = inventory_data.item_data[index]
+
 	if not current_item:
 		%ItemTexture.texture = null
 		%ItemAmountLabel.text = ""

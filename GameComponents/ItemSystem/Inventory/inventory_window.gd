@@ -115,12 +115,14 @@ func _input(event: InputEvent) -> void:
 		if hovered_node is not ItemSlot:
 			return
 		
-		# Only start drag if the slot belongs to this inventory/equipment window
-		if hovered_node.get_parent() != %SlotGroup and hovered_node.get_parent() != %SlotGroup2:
+		var source_data = hovered_node.inventory_data
+		if not source_data:
+			return
+		
+		var current_index : int = hovered_node.index
+		if current_index < 0 or current_index >= source_data.item_data.size():
 			return
 			
-		var source_data = hovered_node.inventory_data
-		var current_index : int = hovered_node.index
 		if not source_data.item_data[current_index]:
 			return
 		create_drag_item(current_index, source_data)
@@ -150,9 +152,23 @@ func _input(event: InputEvent) -> void:
 			return
 
 		var target_data = hovered_node.inventory_data
+		if not target_data:
+			source_data.item_data[index] = item
+			GlobalSignalBus.UpdateInventory.emit()
+			current_dragged_item_data = {}
+			return
+
 		var target_index = hovered_node.index
 
 		if target_data is EquipmentData and not target_data.can_equip(item, target_index):
+			source_data.item_data[index] = item
+			GlobalSignalBus.UpdateInventory.emit()
+			current_dragged_item_data = {}
+			return
+		
+		# Check if ItemResult slot (index 2 in recombinator)
+		# A recombinator slot will have a node name starting with "ItemResult" or being exactly "ItemResult"
+		if hovered_node.name == "ItemResult":
 			source_data.item_data[index] = item
 			GlobalSignalBus.UpdateInventory.emit()
 			current_dragged_item_data = {}
