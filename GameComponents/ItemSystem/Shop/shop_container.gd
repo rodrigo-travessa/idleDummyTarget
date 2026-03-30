@@ -47,20 +47,66 @@ func generate_shop_items() -> void:
 	inventory_data = InventoryData.new()
 	inventory_data.item_data.resize(shop_size)
 	
-	var legendary_index = randi() % shop_size
-	for i in range(shop_size):
-		if i == legendary_index:
-			inventory_data.item_data[i] = generate_random_item(true)
-		else:
-			inventory_data.item_data[i] = generate_random_item(false)
+	var player: Player = get_tree().root.find_child("Player", true, false)
+	var luck = player.stats.get_stat(Enums.StatId.LUCK) if player and player.stats else 0.0
+	
+	# Base weights: Common 50%, Uncommon 25%, Rare 12.5%, Epic 6.75%, Legendary 0.75%
+	# Total 'Rare or better' = 12.5 + 6.75 + 0.75 = 20%
+	var weight_common = 50.0
+	var weight_uncommon = 25.0
+	var weight_rare = 12.5
+	var weight_epic = 6.75
+	var weight_legendary = 0.75
+	
+	# Luck influence:
+	# To have > 50% 'Rare or better' at 50 Luck, we need to shift weight from Common/Uncommon.
+	# Let's shift 1.2% per point of luck from Common/Uncommon pool to Rare+ pool.
+	# At 50 Luck, shift = 60%.
+	# Common: 50 -> 10, Uncommon: 25 -> 5. Total Common/Uncommon = 15%.
+	# Rare+ gets 20 + 60 = 80%. This satisfies > 50%.
+	
+	var shift_per_luck = 1.2
+	var total_shift = luck * shift_per_luck
+	
+	var base_common_uncommon = weight_common + weight_uncommon
+	var actual_shift = min(total_shift, base_common_uncommon - 10.0) # Keep at least 10% for C/U
+	
+	if actual_shift > 0:
+		var shift_common = actual_shift * (weight_common / base_common_uncommon)
+		var shift_uncommon = actual_shift * (weight_uncommon / base_common_uncommon)
+		
+		weight_common -= shift_common
+		weight_uncommon -= shift_uncommon
+		
+		var base_rare_plus = weight_rare + weight_epic + weight_legendary
+		weight_rare += actual_shift * (weight_rare / base_rare_plus)
+		weight_epic += actual_shift * (weight_epic / base_rare_plus)
+		weight_legendary += actual_shift * (weight_legendary / base_rare_plus)
 
-func generate_random_item(is_legendary: bool = false) -> ItemData:
+	for i in range(shop_size):
+		var roll = randf_range(0, 100.0)
+		var num_stats = 1
+		
+		if roll <= weight_common:
+			num_stats = 1
+		elif roll <= weight_common + weight_uncommon:
+			num_stats = 2
+		elif roll <= weight_common + weight_uncommon + weight_rare:
+			num_stats = 3
+		elif roll <= weight_common + weight_uncommon + weight_rare + weight_epic:
+			num_stats = 4
+		else:
+			num_stats = 6
+		
+		inventory_data.item_data[i] = generate_random_item_by_stats(num_stats)
+
+func generate_random_item_by_stats(num_stats: int) -> ItemData:
+	var is_legendary = (num_stats == 6)
 	var item = ItemData.new()
 	item.item_name = "Legendary Item" if is_legendary else "Random Item"
 	item.item_type = item_textures.keys()[randi() % item_textures.size()]
 	item.item_texture = item_textures[item.item_type]
 	
-	var num_stats = 6 if is_legendary else randi_range(1, 4)
 	var available_stats = Enums.StatId.values()
 	available_stats.shuffle()
 	
@@ -84,6 +130,9 @@ func generate_random_item(is_legendary: bool = false) -> ItemData:
 			item.price = item.item_stats.size() * 10 + randi_range(0, 10)
 		
 	return item
+
+func generate_random_item(is_legendary: bool = false) -> ItemData:
+	return generate_random_item_by_stats(6 if is_legendary else randi_range(1, 4))
 
 func update_shop_ui() -> void:
 	for slot in %ShopSlotGroup.get_children():

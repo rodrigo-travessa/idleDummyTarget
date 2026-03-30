@@ -11,23 +11,24 @@ func _ready() -> void:
 	%ItemName.text = ItemName
 	%ItemTexture.texture = ItemTexture
 	%ItemTexture.modulate = TextureModulate
-	%ItemStats.text = ItemStats + "Price: %s Gold" % ItemPrice
-	
+	var full_stats_text = ItemStats + "Price: %s Gold" % ItemPrice
+	%ItemStats.text = full_stats_text
+
 	# Adjust position to stay within viewport
 	call_deferred("_adjust_position")
 
 func _adjust_position() -> void:
 	var viewport_rect = get_viewport_rect()
-	var tooltip_size = $TextureRect.size # Using the background texture size
-	
+	var tooltip_size = size # Using the PanelContainer size
+
 	var target_pos = global_position
-	
+
 	# Check right edge
 	if target_pos.x + tooltip_size.x > viewport_rect.size.x:
 		target_pos.x -= tooltip_size.x + 10 # 10 is a small offset
-		
+
 	# Check bottom edge
 	if target_pos.y + tooltip_size.y > viewport_rect.size.y:
 		target_pos.y -= tooltip_size.y + 10
-		
+
 	global_position = target_pos

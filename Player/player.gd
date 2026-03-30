@@ -17,7 +17,7 @@ func _ready():
 			# but be careful not to overwrite the reference if it's already set from editor
 			# and contains important metadata.
 			# For now, let's just copy the gold.
-			stats.total_gold = save.player_stats.total_gold + 100000000
+			stats.total_gold = save.player_stats.total_gold
 	
 	GlobalSignalBus.connect("UpdateInventory", _on_inventory_updated)
 	update_effective_stats()
