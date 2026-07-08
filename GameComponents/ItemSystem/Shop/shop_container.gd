@@ -18,15 +18,15 @@ var item_textures = {
 func _process(_delta: float) -> void:
 	if not has_node("ItemDrag"):
 		return
-	
+
 	var drag_item = get_node("ItemDrag")
 	var viewport_rect = get_viewport_rect()
 	var target_pos = get_global_mouse_position() - drag_item.size / 2
-	
+
 	# Clamp to screen
 	target_pos.x = clamp(target_pos.x, 0, viewport_rect.size.x - drag_item.size.x)
 	target_pos.y = clamp(target_pos.y, 0, viewport_rect.size.y - drag_item.size.y)
-	
+
 	drag_item.global_position = target_pos
 
 
@@ -46,10 +46,10 @@ func connect_signals() -> void:
 func generate_shop_items() -> void:
 	inventory_data = InventoryData.new()
 	inventory_data.item_data.resize(shop_size)
-	
+
 	var player: Player = get_tree().root.find_child("Player", true, false)
 	var luck = player.stats.get_stat(Enums.StatId.LUCK) if player and player.stats else 0.0
-	
+
 	# Base weights: Common 50%, Uncommon 25%, Rare 12.5%, Epic 6.75%, Legendary 0.75%
 	# Total 'Rare or better' = 12.5 + 6.75 + 0.75 = 20%
 	var weight_common = 50.0
@@ -57,27 +57,27 @@ func generate_shop_items() -> void:
 	var weight_rare = 12.5
 	var weight_epic = 6.75
 	var weight_legendary = 0.75
-	
+
 	# Luck influence:
 	# To have > 50% 'Rare or better' at 50 Luck, we need to shift weight from Common/Uncommon.
 	# Let's shift 1.2% per point of luck from Common/Uncommon pool to Rare+ pool.
 	# At 50 Luck, shift = 60%.
 	# Common: 50 -> 10, Uncommon: 25 -> 5. Total Common/Uncommon = 15%.
 	# Rare+ gets 20 + 60 = 80%. This satisfies > 50%.
-	
+
 	var shift_per_luck = 1.2
 	var total_shift = luck * shift_per_luck
-	
+
 	var base_common_uncommon = weight_common + weight_uncommon
 	var actual_shift = min(total_shift, base_common_uncommon - 10.0) # Keep at least 10% for C/U
-	
+
 	if actual_shift > 0:
 		var shift_common = actual_shift * (weight_common / base_common_uncommon)
 		var shift_uncommon = actual_shift * (weight_uncommon / base_common_uncommon)
-		
+
 		weight_common -= shift_common
 		weight_uncommon -= shift_uncommon
-		
+
 		var base_rare_plus = weight_rare + weight_epic + weight_legendary
 		weight_rare += actual_shift * (weight_rare / base_rare_plus)
 		weight_epic += actual_shift * (weight_epic / base_rare_plus)
@@ -86,7 +86,7 @@ func generate_shop_items() -> void:
 	for i in range(shop_size):
 		var roll = randf_range(0, 100.0)
 		var num_stats = 1
-		
+
 		if roll <= weight_common:
 			num_stats = 1
 		elif roll <= weight_common + weight_uncommon:
@@ -97,7 +97,7 @@ func generate_shop_items() -> void:
 			num_stats = 4
 		else:
 			num_stats = 6
-		
+
 		inventory_data.item_data[i] = generate_random_item_by_stats(num_stats)
 
 func generate_random_item_by_stats(num_stats: int) -> ItemData:
@@ -106,15 +106,15 @@ func generate_random_item_by_stats(num_stats: int) -> ItemData:
 	item.item_name = "Legendary Item" if is_legendary else "Random Item"
 	item.item_type = item_textures.keys()[randi() % item_textures.size()]
 	item.item_texture = item_textures[item.item_type]
-	
+
 	var available_stats = Enums.StatId.values()
 	available_stats.shuffle()
-	
+
 	for i in range(num_stats):
 		var stat_id = available_stats[i]
 		var stat_value = randi_range(0, 10)
 		item.item_stats[stat_id] = stat_value
-	
+
 	match num_stats:
 		1: # Normal
 			item.price = randi_range(100, 1000)
@@ -128,7 +128,7 @@ func generate_random_item_by_stats(num_stats: int) -> ItemData:
 			item.price = randi_range(50000, 100000)
 		_:
 			item.price = item.item_stats.size() * 10 + randi_range(0, 10)
-		
+
 	return item
 
 func generate_random_item(is_legendary: bool = false) -> ItemData:
@@ -154,7 +154,7 @@ func _input(event: InputEvent) -> void:
 		var hovered_node : Control = get_viewport().gui_get_hovered_control()
 		if hovered_node is not ItemSlot:
 			return
-		
+
 		# Check if the slot belongs to THIS shop container
 		if hovered_node.get_parent() != %ShopSlotGroup:
 			return
@@ -181,7 +181,7 @@ func _input(event: InputEvent) -> void:
 		var hovered_node : Control = get_viewport().gui_get_hovered_control()
 		if hovered_node is not ItemSlot:
 			return
-		
+
 		# Check if the slot belongs to THIS shop container
 		if hovered_node.get_parent() != %ShopSlotGroup:
 			return
@@ -197,27 +197,27 @@ func _input(event: InputEvent) -> void:
 			if player.stats.total_gold < item.price:
 				print("Not enough gold!")
 				return
-			
+
 			var inv_window = get_tree().root.find_child("InventoryWindow", true, false)
 			if not inv_window or not inv_window.inventory_data:
 				return
-			
+
 			var target_inv = inv_window.inventory_data
 			var empty_slot_index = -1
 			for i in range(target_inv.item_data.size()):
 				if target_inv.item_data[i] == null:
 					empty_slot_index = i
 					break
-			
+
 			if empty_slot_index == -1:
 				print("Inventory full!")
 				return
-				
+
 			# Proceed with purchase
 			player.stats.total_gold -= item.price
 			target_inv.item_data[empty_slot_index] = item
 			source_data.item_data[current_index] = null
-			
+
 			SaveManager.save_game(inv_window.inventory_data, inv_window.equipment_data, player.stats)
 			GlobalSignalBus.UpdateInventory.emit()
 
@@ -250,14 +250,14 @@ func _input(event: InputEvent) -> void:
 
 		target_data.item_data[target_index] = item
 		GlobalSignalBus.UpdateInventory.emit()
-		
+
 		# If the target is the player's inventory or equipment, save the game
 		if target_data is InventoryData or target_data is EquipmentData:
 			var player = get_tree().root.find_child("Player", true, false)
 			var inv_window = get_tree().root.find_child("InventoryWindow", true, false)
 			if inv_window:
 				SaveManager.save_game(inv_window.inventory_data, inv_window.equipment_data, player.stats if player else null)
-		
+
 		current_dragged_item_data = {}
 
 
@@ -272,7 +272,7 @@ func create_drag_item(Index: int, SourceData: Resource):
 	new_drag_item.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	new_drag_item.name = "ItemDrag"
 	new_drag_item.modulate = get_tier_color(item.item_stats.size())
-	
+
 	add_child(new_drag_item)
 
 func get_tier_color(modifier_count: int) -> Color:

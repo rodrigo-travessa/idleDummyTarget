@@ -18,15 +18,15 @@ var current_dragged_item_data: Dictionary
 func _process(_delta: float) -> void:
 	if not has_node("ItemDrag"):
 		return
-	
+
 	var drag_item = get_node("ItemDrag")
 	var viewport_rect = get_viewport_rect()
 	var target_pos = get_global_mouse_position() - drag_item.size / 2
-	
+
 	# Clamp to screen
 	target_pos.x = clamp(target_pos.x, 0, viewport_rect.size.x - drag_item.size.x)
 	target_pos.y = clamp(target_pos.y, 0, viewport_rect.size.y - drag_item.size.y)
-	
+
 	drag_item.global_position = target_pos
 
 
@@ -46,18 +46,51 @@ func _ready() -> void:
 	connect_signals()
 	update_stats_display()
 	%DeleteInventoryButton.pressed.connect(_on_delete_inventory_button_pressed)
+	%SortInventoryButton.pressed.connect(_on_sort_inventory_pressed)
 
 func _on_delete_inventory_button_pressed() -> void:
 	if inventory_data and inventory_data.item_data:
 		for i in range(inventory_data.item_data.size()):
 			inventory_data.item_data[i] = null
-	
+
 	var player = get_tree().root.find_child("Player", true, false)
 	if player and player.stats:
 		player.stats.total_gold = 0
-	
+
 	SaveManager.save_game(inventory_data, equipment_data, player.stats if player else null)
 	GlobalSignalBus.UpdateInventory.emit()
+
+func _on_sort_inventory_pressed() -> void:
+	if not inventory_data or not inventory_data.item_data:
+		return
+
+	# Create a copy of the items, removing nulls temporarily for sorting
+	var items = []
+	for item in inventory_data.item_data:
+		if item:
+			items.append(item)
+
+	# Sort: Primarily by rarity (stats count) then by type
+	items.sort_custom(func(a, b):
+		var rarity_a = a.item_stats.size()
+		var rarity_b = b.item_stats.size()
+
+		if rarity_a != rarity_b:
+			return rarity_a > rarity_b # Higher rarity first
+
+		return a.item_type < b.item_type # Group similar types
+	)
+
+	# Clear inventory and put items back
+	var old_size = inventory_data.item_data.size()
+	inventory_data.item_data.clear()
+	inventory_data.item_data.assign(items)
+	inventory_data.item_data.resize(old_size)
+
+	GlobalSignalBus.UpdateInventory.emit()
+
+	var player = get_tree().root.find_child("Player", true, false)
+	SaveManager.save_game(inventory_data, equipment_data, player.stats if player else null)
 
 func update_stats_display() -> void:
 	var player = get_tree().root.find_child("Player", true, false)
@@ -96,11 +129,11 @@ func update_inventory_data() -> void:
 			new_slot.current_item = item_data
 			new_slot.index = equipment_index
 			new_slot.inventory_data = equipment_data
-			
+
 			var slot_type = EquipmentData.SLOT_TYPES[equipment_index]
 			if item_textures.has(slot_type):
 				new_slot.set_hint_texture(item_textures[slot_type])
-				
+
 			equipment_index += 1
 			%SlotGroup2.add_child(new_slot)
 
@@ -114,15 +147,15 @@ func _input(event: InputEvent) -> void:
 		var hovered_node : Control = get_viewport().gui_get_hovered_control()
 		if hovered_node is not ItemSlot:
 			return
-		
+
 		var source_data = hovered_node.inventory_data
 		if not source_data:
 			return
-		
+
 		var current_index : int = hovered_node.index
 		if current_index < 0 or current_index >= source_data.item_data.size():
 			return
-			
+
 		if not source_data.item_data[current_index]:
 			return
 		create_drag_item(current_index, source_data)
@@ -144,10 +177,10 @@ func _input(event: InputEvent) -> void:
 		if not hovered_node is ItemSlot:
 			source_data.item_data[index] = item
 			GlobalSignalBus.UpdateInventory.emit()
-			
+
 			var player = get_tree().root.find_child("Player", true, false)
 			SaveManager.save_game(inventory_data, equipment_data, player.stats if player else null)
-			
+
 			current_dragged_item_data = {}
 			return
 
@@ -165,7 +198,7 @@ func _input(event: InputEvent) -> void:
 			GlobalSignalBus.UpdateInventory.emit()
 			current_dragged_item_data = {}
 			return
-		
+
 		# Check if ItemResult slot (index 2 in recombinator)
 		# A recombinator slot will have a node name starting with "ItemResult" or being exactly "ItemResult"
 		if hovered_node.name == "ItemResult":
@@ -182,28 +215,28 @@ func _input(event: InputEvent) -> void:
 
 		target_data.item_data[target_index] = item
 		GlobalSignalBus.UpdateInventory.emit()
-		
+
 		var player = get_tree().root.find_child("Player", true, false)
 		SaveManager.save_game(inventory_data, equipment_data, player.stats if player else null)
-		
+
 		current_dragged_item_data = {}
 
 	if event.is_action_pressed("mouse_right"):
 		var hovered_node: Control = get_viewport().gui_get_hovered_control()
 		if hovered_node is not ItemSlot:
 			return
-		
+
 		var source_data = hovered_node.inventory_data
 		if not source_data:
 			return
-			
+
 		var current_index: int = hovered_node.index
 		if current_index < 0 or current_index >= source_data.item_data.size():
 			return
-			
+
 		if not source_data.item_data[current_index]:
 			return
-			
+
 		if source_data is EquipmentData:
 			InventoryManager.unequip_item(current_index, source_data, inventory_data)
 		elif source_data is InventoryData:
@@ -223,7 +256,7 @@ func create_drag_item(Index: int, SourceData: Resource):
 	new_drag_item.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	new_drag_item.name = "ItemDrag"
 	new_drag_item.modulate = get_tier_color(item.item_stats.size())
-	
+
 	add_child(new_drag_item)
 
 func get_tier_color(modifier_count: int) -> Color:

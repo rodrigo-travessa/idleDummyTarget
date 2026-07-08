@@ -47,7 +47,7 @@ func _process(delta: float) -> void:
 			var attack_result = calculate_damage()
 			var damage_dealt = attack_result[0]
 			var is_crit = attack_result[1]
-			target._emit_damage_text(damage_dealt, is_crit)
+			target.take_damage(damage_dealt, is_crit)
 			GlobalSignalBus.PlayerDamaged.emit(damage_dealt)
 			time_until_next_attack = delay_between_attacks
 		time_until_next_attack -= delta

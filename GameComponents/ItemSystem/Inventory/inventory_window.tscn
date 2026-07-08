@@ -56,6 +56,11 @@ unique_name_in_owner = true
 layout_mode = 2
 columns = 8
 
+[node name="SortInventoryButton" type="Button" parent="Inventory/MarginContainer/VBoxContainer" unique_id=1279060398]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Sort Inventory"
+
 [node name="DeleteInventoryButton" type="Button" parent="Inventory/MarginContainer/VBoxContainer" unique_id=1279060399]
 unique_name_in_owner = true
 layout_mode = 2

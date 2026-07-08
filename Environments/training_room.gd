@@ -14,6 +14,7 @@ var time_of_last_item_change: float = 0.0
 
 func _ready() -> void:
 	GlobalSignalBus.PlayerDamaged.connect(_on_player_damaged)
+	GlobalSignalBus.EnemyKilled.connect(_on_enemy_killed)
 	GlobalSignalBus.UpdateInventory.connect(_on_inventory_updated)
 	time_of_last_item_change = Time.get_ticks_msec() / 1000.0
 	
@@ -149,8 +150,6 @@ func _on_inventory_updated() -> void:
 	if item_result_slot: item_result_slot.set_item_slot()
 
 func _on_player_damaged(amount: float) -> void:
-	if player and player.stats:
-		player.stats.total_gold += amount
 	damage_since_item_change += amount
 	damage_history.append([Time.get_ticks_msec() / 1000.0, amount])
 	
@@ -158,6 +157,10 @@ func _on_player_damaged(amount: float) -> void:
 	var current_time = Time.get_ticks_msec() / 1000.0
 	while damage_history.size() > 0 and current_time - damage_history[0][0] > 60.0:
 		damage_history.remove_at(0)
+
+func _on_enemy_killed(reward: float) -> void:
+	if player and player.stats:
+		player.stats.total_gold += reward
 
 func _process(_delta: float) -> void:
 	update_dps_ui()
@@ -177,7 +180,9 @@ func update_dps_ui() -> void:
 	var dps_item_change = damage_since_item_change / time_since_item_change
 	
 	var current_gold = player.stats.total_gold if player and player.stats else 0.0
+	var enemy_hp = player.target.stats.current_hp if player and player.target and player.target.stats else 0.0
 	var text = "Gold: %.0f \n" % current_gold
+	text += "Enemy HP: %.0f\n" % enemy_hp
 	text += "DPS: %.2f\n" % dps_1s
 	text += "Dps Last 5 seconds: %.2f\n" % dps_5s
 	text += "Dps Last 30 seconds %.2f\n" % dps_30s

@@ -7,6 +7,10 @@ class_name DummyStats extends Resource
 @export var hp_regen: float = 0.0
 @export var evasion: float = 0.0
 
+var current_hp: float = 100.0
+
+func reset() -> void:
+	current_hp = max_hp
 
 func get_stat(stat_id: Enums.DummyStats ) -> float:
 	match stat_id:
